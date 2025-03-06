@@ -1,4 +1,5 @@
 from rest_framework import viewsets
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 
 from apps.core.utils.paginator import StandardPagination
@@ -25,6 +26,17 @@ class BaseProjectModelView(viewsets.ModelViewSet):
         if self.action in ["list", "retrieve"]:
             return ProjectGETSerializer
         return super().get_serializer_class()
+
+    def get_permissions(self):
+        user = self.request.user
+        if self.action in ["update", "partial_update", "destroy"]:
+            obj = Projects.objects.filter(id=self.kwargs.get("pk")).first()
+
+            if str(user.id) != str(obj.owner.id):
+                raise PermissionDenied(
+                    "You do not have permission to perform this action."
+                )
+        return super().get_permissions()
 
 
 class BaseProjectMemberModelView(viewsets.ModelViewSet):
