@@ -10,6 +10,6 @@ router.register("tasks", views.TaskModelView)
 router.register("comments", views.CommentModelView)
 
 
-urlpatterns = [
+api_v1_patterns = [
     path("", include(router.urls)),
 ]

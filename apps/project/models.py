@@ -17,7 +17,7 @@ class Projects(BaseModel):
     )
 
     class Meta:
-        ordering = ["name"]
+        ordering = ["-id"]
         verbose_name = _("Project")
         verbose_name_plural = _("Projects")
 
@@ -41,9 +41,10 @@ class ProjectMembers(BaseModel):
     )
 
     class Meta:
-        ordering = ["role"]
+        ordering = ["-id"]
         verbose_name = _("Project Member")
         verbose_name_plural = _("Project Members")
+        unique_together = ("project", "user")
 
     def __str__(self):
         return f"{self.user} - {self.project} ({self.role})"
@@ -83,7 +84,7 @@ class Tasks(BaseModel):
     due_date = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        ordering = ["due_date"]
+        ordering = ["-id"]
         verbose_name = _("Task")
         verbose_name_plural = _("Tasks")
 
@@ -97,7 +98,7 @@ class Comments(BaseModel):
     task = models.ForeignKey(Tasks, on_delete=models.CASCADE, verbose_name=_("Task"))
 
     class Meta:
-        ordering = ["-created_at"]
+        ordering = ["-id"]
         verbose_name = _("Comment")
         verbose_name_plural = _("Comments")
 

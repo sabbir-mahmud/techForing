@@ -7,6 +7,10 @@ from apps.project.api.base.serializers import (
     BaseProjectMemberModelSerializer,
     BaseProjectModelSerializer,
     BaseTaskModelSerializer,
+    CommentGETSerializer,
+    ProjectGETSerializer,
+    ProjectMemberGETSerializer,
+    TaskGETSerializer,
 )
 from apps.project.models import Comments, ProjectMembers, Projects, Tasks
 
@@ -17,12 +21,22 @@ class BaseProjectModelView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     pagination_class = StandardPagination
 
+    def get_serializer_class(self):
+        if self.action in ["list", "retrieve"]:
+            return ProjectGETSerializer
+        return super().get_serializer_class()
+
 
 class BaseProjectMemberModelView(viewsets.ModelViewSet):
     queryset = ProjectMembers.objects.all()
     serializer_class = BaseProjectMemberModelSerializer
     permission_classes = [IsAuthenticated]
     pagination_class = StandardPagination
+
+    def get_serializer_class(self):
+        if self.action in ["list", "retrieve"]:
+            return ProjectMemberGETSerializer
+        return super().get_serializer_class()
 
 
 class BaseTaskModelView(viewsets.ModelViewSet):
@@ -31,9 +45,19 @@ class BaseTaskModelView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     pagination_class = StandardPagination
 
+    def get_serializer_class(self):
+        if self.action in ["list", "retrieve"]:
+            return TaskGETSerializer
+        return super().get_serializer_class()
+
 
 class BaseCommentModelView(viewsets.ModelViewSet):
     queryset = Comments.objects.all()
     serializer_class = BaseCommentModelSerializer
     permission_classes = [IsAuthenticated]
     pagination_class = StandardPagination
+
+    def get_serializer_class(self):
+        if self.action in ["list", "retrieve"]:
+            return CommentGETSerializer
+        return super().get_serializer_class()
